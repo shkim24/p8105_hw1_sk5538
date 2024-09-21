@@ -8,10 +8,8 @@ output: github_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Necessary packages and dataset are loaded. 
+Necessary package and data set are loaded. 
 ```{r, message = FALSE}
-library(ggplot2)
-library(dplyr)
 library(tidyverse)
 data("penguins", package = "palmerpenguins")
 ```
@@ -21,6 +19,8 @@ data("penguins", package = "palmerpenguins")
 ```
 ## Problem 1
 
+
+### Description of data
 The Penguins dataset contains size measurements for `r length(unique(penguins[["species"]]))` species of adult foraging penguins observed near Palmer Station, Antarctica. 
 
 The size of the data set is `r nrow(penguins)` rows and `r ncol(penguins)` columns, in which the variables are: `r paste(names(penguins), collapse = ", ")`.
@@ -28,7 +28,7 @@ The size of the data set is `r nrow(penguins)` rows and `r ncol(penguins)` colum
 Three different species, `r paste(unique(penguins[["species"]]), collapse = ", ")` were observed in `r length(unique(penguins[["island"]]))` different islands. The sizes of the penguins were measured in terms of bills, flippers, and weight. The mean flipper length is `r round(mean(penguins[["flipper_length_mm"]], na.rm = TRUE), 3)`.  
 
 
-
+### Scatterplot
 ```{r}
 bill_flipper_plot <- ggplot(
   penguins, 
@@ -48,13 +48,13 @@ ggsave("flipper_vs_bill_scatterplot.png", plot = bill_flipper_plot)
 
 ## Problem 2  
 
-Create a data frame as instructed.
+### Create a data frame
 ```{r}
 set.seed(123)
 sample = rnorm(10)
 log_vec = sample > 0 
 char_vec = letters[1:10]
-fac_vec = factor(rep(c("A", "B", "C"), length.out = 10))
+fac_vec = factor(rep(c("low", "medium", "high"), length.out = 10))
 
 p2df = tibble(
   sample = sample,
@@ -64,7 +64,7 @@ p2df = tibble(
 )
 ```
 
-Try to take the mean of each variable. 
+### Try to take the mean of each variable. 
 ```{r}
 mean_sample = mean(pull(p2df, sample))
 mean_log_vec = mean(pull(p2df, log_vec))
@@ -87,7 +87,9 @@ Taking the mean of logic vector also works, since logical values can be coerced 
 However, taking the mean of character vector or factor vector does not work. Because they are not numeric data, and the mean() function cannot operate on them. 
 
 
-```{r}
+
+### Try applying as.numeric function
+```{r, eval = FALSE}
 num_log = as.numeric(pull(p2df, log_vec))
 num_char = as.numeric(pull(p2df, char_vec))
 num_fac = as.numeric(pull(p2df, fac_vec))
@@ -95,14 +97,18 @@ num_fac = as.numeric(pull(p2df, fac_vec))
 ```
 
 
-```{r, echo = FALSE}
-cat("Numeric logical vector:", num_log, "\n")
-cat("Numeric character vector:", num_char, "\n")
-cat("Numeric factor vector:", num_fac, "\n")
+```{r, include = FALSE}
+#cat("Numeric logical vector:", num_log, "\n")
+#cat("Numeric character vector:", num_char, "\n")
+#cat("Numeric factor vector:", num_fac, "\n")
 
 ```
 
-For logical vector, as.numeric() converts TRUE to 1 and FALSE to 0.
-For the factor vector, as.numeric() assigns integers in order of the levels in the factor. 
+For logical vector, as.numeric() converts TRUE to 1 and FALSE to 0. This explains why the mean of logical vector could be computed.  
+
+For the factor vector, as.numeric() assigns integers in order of the levels in the factor. In the example above, 'low' = 2, 'medium' = 3, and 'high' = 1, which is not what the factor intended the order to be. Instead, the values are assigned alphabetically. As the factor is converted to its underlying integer codes, the assigned integers are not meaningful. The mean() function does not coerce such conversion, so the mean of a factor vector cannot be computed.  
+
+The character vector contains 'chr' data type. Any string or character cannot be converted to numeric values. This also explains why the mean could not be computed. 
+
 
 
