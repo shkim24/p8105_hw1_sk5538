@@ -40,7 +40,7 @@ bill_flipper_plot <- ggplot(
 
 print(bill_flipper_plot)
 
-ggsave("flipper_vs_bill_scatterplot.png", plot = bill_flipper_plot, width = 8, height = 6)
+ggsave("flipper_vs_bill_scatterplot.png", plot = bill_flipper_plot)
 
 ```
 
@@ -71,7 +71,7 @@ mean_log_vec = mean(pull(p2df, log_vec))
 mean_char_vec = mean(pull (p2df, char_vec))
 mean_fac_vec = mean(pull (p2df, fac_vec))
 ```
-```{r}
+```{r, echo = FALSE}
 cat(
   "Mean of random_sample:", mean_sample, "\n",
   "Mean of logical_vector:", mean_log_vec, "\n",
@@ -102,6 +102,7 @@ cat("Numeric factor vector:", num_fac, "\n")
 
 ```
 
-
+For logical vector, as.numeric() converts TRUE to 1 and FALSE to 0.
+For the factor vector, as.numeric() assigns integers in order of the levels in the factor. 
 
 
