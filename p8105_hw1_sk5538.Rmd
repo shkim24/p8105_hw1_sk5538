@@ -1,0 +1,51 @@
+---
+title: "p8105_hw1"
+author: "Senna"
+date: "2024-09-21"
+output: github_document
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Necessary packages and dataset are loaded. 
+```{r, include = FALSE}
+library(ggplot2)
+library(dplyr)
+library(tidyverse)
+data("penguins", package = "palmerpenguins")
+```
+
+```{r eval=FALSE}
+??penguins
+```
+The Penguins dataset contains size measurements for `r length(unique(penguins[["species"]]))` species of adult foraging penguins observed near Palmer Station, Antarctica. 
+
+The variables of the dataset are `r paste(names(penguins), collapse = ", ")`.  
+
+
+There are three species, `r paste(unique(penguins[["species"]]), collapse = ", ")`.  
+There are `r length(unique(penguins[["island"]]))` different islands: `r paste(unique(penguins[["island"]]), collapse = ", ")`.  
+Size of the dataset using nrow and ncol: `r nrow(penguins)` rows and `r ncol(penguins)` columns.  
+The mean flipper length is `r mean(penguins[["flipper_length_mm"]], na.rm = TRUE)`.  
+
+
+```{r}
+p <- ggplot(
+  penguins, 
+  aes(x = bill_length_mm, y = flipper_length_mm, color = species)) +
+  geom_point() +
+  labs(title = "Flipper Length vs Bill Length by Species",
+       x = "Bill Length (mm)",
+       y = "Flipper Length (mm)") +
+  theme_minimal()
+
+print(p)
+
+
+ggsave("flipper_vs_bill_scatterplot.png", plot = p, width = 8, height = 6)
+
+```
+
+
+
