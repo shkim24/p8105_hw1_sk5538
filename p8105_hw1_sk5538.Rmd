@@ -9,29 +9,28 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 Necessary packages and dataset are loaded. 
-```{r, include = FALSE}
+```{r, message = FALSE}
 library(ggplot2)
 library(dplyr)
 library(tidyverse)
 data("penguins", package = "palmerpenguins")
 ```
 
-```{r eval=FALSE}
-??penguins
+```{r include = FALSE}
+# ??penguins
+
 ```
+
 The Penguins dataset contains size measurements for `r length(unique(penguins[["species"]]))` species of adult foraging penguins observed near Palmer Station, Antarctica. 
 
-The variables of the dataset are `r paste(names(penguins), collapse = ", ")`.  
+The size of the data set is`r nrow(penguins)` rows and `r ncol(penguins)` columns, in which the columns (variables) are: `r paste(names(penguins), collapse = ", ")`.
 
+Three different species, `r paste(unique(penguins[["species"]]), collapse = ", ")` were observed in `r length(unique(penguins[["island"]]))` different islands. The sizes of the penguins were measured in terms of bills, flippers, and weight. The mean flipper length is `r mean(penguins[["flipper_length_mm"]], na.rm = TRUE)`.  
 
-There are three species, `r paste(unique(penguins[["species"]]), collapse = ", ")`.  
-There are `r length(unique(penguins[["island"]]))` different islands: `r paste(unique(penguins[["island"]]), collapse = ", ")`.  
-Size of the dataset using nrow and ncol: `r nrow(penguins)` rows and `r ncol(penguins)` columns.  
-The mean flipper length is `r mean(penguins[["flipper_length_mm"]], na.rm = TRUE)`.  
 
 
 ```{r}
-p <- ggplot(
+bill_flipper_plot <- ggplot(
   penguins, 
   aes(x = bill_length_mm, y = flipper_length_mm, color = species)) +
   geom_point() +
@@ -40,10 +39,10 @@ p <- ggplot(
        y = "Flipper Length (mm)") +
   theme_minimal()
 
-print(p)
+print(bill_flipper_plot)
 
 
-ggsave("flipper_vs_bill_scatterplot.png", plot = p, width = 8, height = 6)
+ggsave("flipper_vs_bill_scatterplot.png", plot = bill_flipper_plot, width = 8, height = 6)
 
 ```
 
