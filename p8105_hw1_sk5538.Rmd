@@ -18,14 +18,14 @@ data("penguins", package = "palmerpenguins")
 
 ```{r include = FALSE}
 # ??penguins
-
 ```
+## Problem 1
 
 The Penguins dataset contains size measurements for `r length(unique(penguins[["species"]]))` species of adult foraging penguins observed near Palmer Station, Antarctica. 
 
-The size of the data set is`r nrow(penguins)` rows and `r ncol(penguins)` columns, in which the columns (variables) are: `r paste(names(penguins), collapse = ", ")`.
+The size of the data set is `r nrow(penguins)` rows and `r ncol(penguins)` columns, in which the variables are: `r paste(names(penguins), collapse = ", ")`.
 
-Three different species, `r paste(unique(penguins[["species"]]), collapse = ", ")` were observed in `r length(unique(penguins[["island"]]))` different islands. The sizes of the penguins were measured in terms of bills, flippers, and weight. The mean flipper length is `r mean(penguins[["flipper_length_mm"]], na.rm = TRUE)`.  
+Three different species, `r paste(unique(penguins[["species"]]), collapse = ", ")` were observed in `r length(unique(penguins[["island"]]))` different islands. The sizes of the penguins were measured in terms of bills, flippers, and weight. The mean flipper length is `r round(mean(penguins[["flipper_length_mm"]], na.rm = TRUE), 3)`.  
 
 
 
@@ -36,15 +36,72 @@ bill_flipper_plot <- ggplot(
   geom_point() +
   labs(title = "Flipper Length vs Bill Length by Species",
        x = "Bill Length (mm)",
-       y = "Flipper Length (mm)") +
-  theme_minimal()
+       y = "Flipper Length (mm)") 
 
 print(bill_flipper_plot)
-
 
 ggsave("flipper_vs_bill_scatterplot.png", plot = bill_flipper_plot, width = 8, height = 6)
 
 ```
+
+
+
+## Problem 2  
+
+Create a data frame as instructed.
+```{r}
+set.seed(123)
+sample = rnorm(10)
+log_vec = sample > 0 
+char_vec = letters[1:10]
+fac_vec = factor(rep(c("A", "B", "C"), length.out = 10))
+
+p2df = tibble(
+  sample = sample,
+  log_vec = log_vec,
+  char_vec = char_vec,
+  fac_vec = fac_vec
+)
+```
+
+Try to take the mean of each variable. 
+```{r}
+mean_sample = mean(pull(p2df, sample))
+mean_log_vec = mean(pull(p2df, log_vec))
+mean_char_vec = mean(pull (p2df, char_vec))
+mean_fac_vec = mean(pull (p2df, fac_vec))
+```
+```{r}
+cat(
+  "Mean of random_sample:", mean_sample, "\n",
+  "Mean of logical_vector:", mean_log_vec, "\n",
+  "Mean of character_vector:", mean_char_vec, "\n",
+  "Mean of factor_vector:", mean_fac_vec, "\n")
+
+```
+
+Taking the mean of random sample works because it has dlb, or double, as its data type. This is a type of numeric data, so the mean can be computed. 
+
+Taking the mean of logic vector also works, since logical values can be coerced to numeric values (TRUE = 1, FALSE = 0).
+
+However, taking the mean of character vector or factor vector does not work. Because they are not numeric data, and the mean() function cannot operate on them. 
+
+
+```{r}
+num_log = as.numeric(pull(p2df, log_vec))
+num_char = as.numeric(pull(p2df, char_vec))
+num_fac = as.numeric(pull(p2df, fac_vec))
+
+```
+
+
+```{r, echo = FALSE}
+cat("Numeric logical vector:", num_log, "\n")
+cat("Numeric character vector:", num_char, "\n")
+cat("Numeric factor vector:", num_fac, "\n")
+
+```
+
 
 
 
